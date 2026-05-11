@@ -73,8 +73,15 @@ public class TestCargaInicial implements CommandLineRunner {
                 .fecha(LocalDate.now().plusDays(10)) // Turno para dentro de 10 días
                 .build();
 
+        Turno turno3 = Turno.builder()
+                .paciente(paciente1)
+                .profesional(profesional3)
+                .fecha(LocalDate.now().plusDays(7)) // Turno para dentro de 10 días
+                .build();
+
         turnoRepository.save(turno1);
         turnoRepository.save(turno2);
+        turnoRepository.save(turno3);
 
         System.out.println("¡Carga de datos finalizada con éxito!");
     }

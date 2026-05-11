@@ -68,4 +68,32 @@ public class GlobalExceptionHandler {
                 .build();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
+
+    @ExceptionHandler(org.springframework.dao.DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponseDTO> handleDataIntegrityViolation(org.springframework.dao.DataIntegrityViolationException ex, HttpServletRequest request) {
+
+        ErrorResponseDTO error = ErrorResponseDTO.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.CONFLICT.value())
+                .error(HttpStatus.CONFLICT.getReasonPhrase())
+                .message("No se puede eliminar el registro porque está vinculado a otros datos en el sistema (Por ejemplo, un paciente que ya tiene turnos asignados).")
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(org.springframework.http.converter.HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponseDTO> handleHttpMessageNotReadable(org.springframework.http.converter.HttpMessageNotReadableException ex, HttpServletRequest request) {
+
+        ErrorResponseDTO error = ErrorResponseDTO.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .message("El cuerpo de la petición está vacío o el formato JSON es incorrecto. Por favor, revise los datos enviados.")
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
 }

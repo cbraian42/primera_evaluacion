@@ -20,14 +20,15 @@ Este proyecto es una API RESTful desarrollada en Spring Boot para gestionar el f
 * **Framework:** Spring Boot 3
 * **Persistencia:** Spring Data JPA / Hibernate
 * **Base de Datos:** H2 (En memoria)
-* **Validaciones:** Jakarta Validation
-* **Productividad:** Lombok
+* **Validaciones:** Jakarta Validation (`@Valid`, `@NotBlank`, etc.)
+* **Manejo de Errores:** `@RestControllerAdvice` (Elegido sobre el `@ControllerAdvice` clásico por ser el estándar moderno para APIs REST, garantizando la serialización automática de excepciones a formato JSON).
+* **Lombok:** Utilizado no solo para reducir el código *boilerplate* (patrón Builder, Getters/Setters), sino para implementar **Inyección de Dependencias por Constructor** mediante `@RequiredArgsConstructor`, reemplazando el uso tradicional de `@Autowired` para garantizar la inmutabilidad de los componentes.
 
 ## 🚀 Instalación y Ejecución
 
 1. Clonar el repositorio:
    ```bash
-   git clone [https://github.com/tu-usuario/tu-repositorio.git](https://github.com/tu-usuario/tu-repositorio.git)
+   git clone https://github.com/cbraian42/primera_evaluacion.git
    ```
 2. Actualizar las dependencias de Maven.
 3. Ejecutar la clase principal `Application.java`.
@@ -53,6 +54,12 @@ A continuación se detallan algunas de las rutas clave para interactuar con la A
 * `GET /turnos/fecha/{fecha}` - Busca turnos en una fecha específica (formato `YYYY-MM-DD`).
 * `GET /turnos?desde={fecha1}&hasta={fecha2}` - Busca turnos en un rango de fechas.
 
+## 🧪 Probar la API
+
+Para facilitar las pruebas de los endpoints, se incluye una colección de Postman lista para usar.
+El archivo se encuentra en la raíz del proyecto como `API_Clinica_Postman_Collection.json` listo para importar.
+La colección está organizada en carpetas por módulos (Pacientes, Profesionales, Turnos).
+
 ## 🏗️ Arquitectura
 El proyecto fue diseñado siguiendo una **Arquitectura Multicapa** para garantizar la separación de responsabilidades:
 * `Controllers`: Exponen los endpoints HTTP y validan los Request iniciales.
@@ -60,3 +67,8 @@ El proyecto fue diseñado siguiendo una **Arquitectura Multicapa** para garantiz
 * `Repositories`: Gestionan la persistencia en la base de datos mediante Spring Data JPA.
 * `Models & DTOs`: Separan la estructura de la base de datos de los datos que se exponen al cliente.
 * `Mappers`: Encargados de la traducción entre Entidades y DTOs.
+
+## Posibles mejoras
+* `Testing` : El sistema cumple para casos de uso simples y "correctos", se puede mejorar el comportamiento evaluando casos de borde.
+* `Manejo de errores` : Evolucionar el Global Exception Handler implementando el estándar nativo de Spring (ProblemDetail). Esto nos permite abstraer automáticamente cualquier error que no pertenezca a la lógica de negocio (por ejemplo, un Bad Request por un JSON vacío), integrándolo al mismo formato de respuesta unificado.
+* `Documentación interactiva` : Integrar la dependencia de Springdoc OpenAPI para autogenerar la interfaz de Swagger UI, permitiendo la exploración de la API directamente desde el navegador web.
